@@ -23,7 +23,11 @@ def index(request):
 def post_detail(request, pk):
     post = (Post.objects
             .select_related('category')
-            .filter(pk=pk, is_published=True, pub_date__lte=timezone.now(), category__is_published=True)
+            .filter(
+                pk=pk,
+                is_published=True,
+                pub_date__lte=timezone.now(),
+                category__is_published=True)
             .first())
 
     if not post:
@@ -34,7 +38,11 @@ def post_detail(request, pk):
 
 def category_posts(request, category_slug):
     # Найти категорию или вернуть 404
-    category = get_object_or_404(Category, slug=category_slug, is_published=True)
+    category = get_object_or_404(
+        Category,
+        slug=category_slug,
+        is_published=True
+        )
 
     # Получить публикации категории
     posts = (Post.objects
@@ -45,7 +53,8 @@ def category_posts(request, category_slug):
              )
              .order_by('-pub_date'))
 
-    return render(request, 'category_posts.html', {'category': category, 'posts': posts})
+    return render(request, 'category_posts.html', 
+                  {'category': category, 'posts': posts})
 
 
 # from django.shortcuts import render
