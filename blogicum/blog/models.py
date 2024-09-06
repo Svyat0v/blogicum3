@@ -28,6 +28,7 @@ class Category(models.Model):
         verbose_name='Добавлено'
         )
 
+
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
@@ -50,6 +51,7 @@ class Location(models.Model):
         auto_now_add=True,
         verbose_name='Добавлено'
         )
+
 
     class Meta:
         verbose_name = 'местоположение'
@@ -99,6 +101,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Добавлено')
+
 
     class Meta:
         verbose_name = 'публикаия'
