@@ -10,7 +10,11 @@ def index(request):
         pub_date__lte=now(),
         category__is_published=True
     ).order_by('-pub_date')[:5]
-    return render(request, 'blog/index.html', {'posts': posts})
+    context = {
+        'posts': posts,
+        'title': 'Последние публикации'
+    }
+    return render(request, 'blog/index.html', context)
 
 
 def post_detail(request, id):
@@ -21,7 +25,11 @@ def post_detail(request, id):
         pub_date__lte=now(),  # Текущая дата
         category__is_published=True
     )
-    return render(request, 'blog/detail.html', {'post': post})
+    context = {
+        'post': post,
+        'title': post.title
+    }
+    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
@@ -34,9 +42,13 @@ def category_posts(request, category_slug):
         is_published=True,
         pub_date__lte=now()  # Текущая дата
     ).order_by('-pub_date')
+    context = {
+        'category': category,
+        'posts': posts,
+        'title': f'Публикации в категории {category.title}'
+    }
 
-    return render(request, 'blog/category.html',
-                  {'category': category, 'posts': posts})
+    return render(request, 'blog/category.html', context)
 
 
 # from django.shortcuts import render
