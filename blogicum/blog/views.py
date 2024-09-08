@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.utils.timezone import now  # Это можно заменить на собственную функцию получения текущего времени
+from django.utils.timezone import now
 from django.shortcuts import get_object_or_404
 from .models import Post, Category
 
@@ -7,9 +7,9 @@ from .models import Post, Category
 def index(request):
     posts = Post.objects.filter(
         is_published=True,
-        pub_date__lte=now(),  # Замена на подходящий способ получения текущего времени
+        pub_date__lte=now(),
         category__is_published=True
-    ).order_by('-pub_date')[:5]  # Сортировка по дате публикации, ограничение до 5 записей
+    ).order_by('-pub_date')[:5]
     return render(request, 'blog/index.html', {'posts': posts})
 
 
@@ -25,7 +25,9 @@ def post_detail(request, id):
 
 
 def category_posts(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug, is_published=True)
+    category = get_object_or_404(Category,
+                                 slug=category_slug,
+                                 is_published=True)
 
     posts = Post.objects.filter(
         category=category,
