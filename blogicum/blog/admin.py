@@ -7,13 +7,23 @@ admin.site.empty_value_display = 'Не задано'
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'is_published', 'created_at')
+    list_display = (
+        'title',
+        'is_published',
+        'created_at'
+    )
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
 
+
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_published', 'created_at')
+    list_display = (
+        'name',
+        'is_published',
+        'created_at'
+    )
     search_fields = ('name',)
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = (
@@ -25,7 +35,11 @@ class PostAdmin(admin.ModelAdmin):
         'is_published'
     )
     search_fields = ('title', 'author__username')
-    list_filter = ('category', 'location', 'is_published')
+    list_filter = (
+        'category',
+        'location',
+        'is_published'
+    )
 
 
 admin.site.register(Category, CategoryAdmin)
