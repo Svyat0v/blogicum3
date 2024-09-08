@@ -45,7 +45,9 @@ def category_posts(request, category_slug):
     context = {
         'category': category,
         'posts': posts,
-        'title': f'Публикации в категории {category.title}'
+        'title': f'Публикации в категории {category.title}',
+        'key2': 'some_value',
+        'key3': 'another_value'
     }
 
     return render(request, 'blog/category.html', context)
