@@ -9,27 +9,12 @@ def index(request):
         is_published=True,
         pub_date__lte=now(),
         category__is_published=True
-    ).order_by('-pub_date')[:5]
+    ).select_related('category', 'location').order_by('-pub_date')[:5]
     context = {
         'posts': posts,
         'title': 'Последние публикации'
     }
     return render(request, 'blog/index.html', context)
-
-
-def post_detail(request, id):
-    post = get_object_or_404(
-        Post,
-        pk=id,
-        is_published=True,
-        pub_date__lte=now(),  # Текущая дата
-        category__is_published=True
-    )
-    context = {
-        'post': post,
-        'title': post.title
-    }
-    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
@@ -51,3 +36,18 @@ def category_posts(request, category_slug):
     }
 
     return render(request, 'blog/category.html', context)
+
+
+def post_detail(request, id):
+    post = get_object_or_404(
+        Post,
+        pk=id,
+        is_published=True,
+        pub_date__lte=now(),  # Текущая дата
+        category__is_published=True
+    )
+    context = {
+        'post': post,
+        'title': post.title
+    }
+    return render(request, 'blog/detail.html', context)
