@@ -46,8 +46,8 @@ def category_posts(request, category_slug):
         'category': category,
         'posts': posts,
         'title': f'Публикации в категории {category.title}',
-        'key2': category.description, # 'some_value',
-        'key3': posts.count() # 'another_value'
+        'key2': category.description,
+        'key3': posts.count()
     }
 
     return render(request, 'blog/category.html', context)
