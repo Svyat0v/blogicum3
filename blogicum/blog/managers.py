@@ -4,10 +4,11 @@ from django.utils.timezone import now
 
 
 class PostQuerySet(models.QuerySet):
-
-    """QuerySet (разработанный для публикаций):
-    Метод - join_related_data - служит для объединения данных
-    Метод - published - фильтровка публикаций"""
+    """
+    QuerySet (разработанный для публикаций):
+    Метод - join_related_data - служит для объединения данных,
+    Метод - published - фильтровка публикаций.
+    """
 
     def join_related_data(self):
         return self.select_related(
@@ -25,10 +26,11 @@ class PostQuerySet(models.QuerySet):
 
 
 class PostManager(models.Manager):
-
-    """Класс менеджер (разработанный менеджер для запросов публикаций):
+    """
+    Класс менеджер (разработанный менеджер для запросов публикаций):
     Метод - get_queryset - вызов класса PostQuerySet
-    с методами join_related_data + published"""
+    с методами join_related_data + published.
+    """
 
     def get_queryset(self):
         return (
