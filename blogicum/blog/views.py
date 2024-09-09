@@ -1,53 +1,35 @@
-from django.shortcuts import render
-from django.utils.timezone import now
-from django.shortcuts import get_object_or_404
-from .models import Post, Category
+from django.shortcuts import get_object_or_404, render
+
+from .constants import AMOUNT_POSTS_ON_MAIN_PAGE
+
+from .models import Category, Post
 
 
 def index(request):
-    posts = Post.objects.filter(
-        is_published=True,
-        pub_date__lte=now(),
-        category__is_published=True
-    ).select_related('category', 'location').order_by('-pub_date')[:5]
-    context = {
-        'posts': posts,
-        'title': 'Последние публикации'
-    }
+    """Показывает на главной странице."""
+    print(Post.post_objects.all())  # Строка для отладки
+    posts = Post.post_objects.all()[:AMOUNT_POSTS_ON_MAIN_PAGE]
+    context = {'post_list': posts}
     return render(request, 'blog/index.html', context)
 
 
-def category_posts(request, category_slug):
-    category = get_object_or_404(Category,
-                                 slug=category_slug,
-                                 is_published=True)
-
-    posts = Post.objects.filter(
-        category=category,
-        is_published=True,
-        pub_date__lte=now()  # Текущая дата
-    ).order_by('-pub_date')
-    context = {
-        'category': category,
-        'posts': posts,
-        'title': f'Публикации в категории {category.title}',
-        'key2': category.description,
-        'key3': posts.count()
-    }
-
-    return render(request, 'blog/category.html', context)
-
-
-def post_detail(request, id):
-    post = get_object_or_404(
-        Post,
-        pk=id,
-        is_published=True,
-        pub_date__lte=now(),  # Текущая дата
-        category__is_published=True
-    )
-    context = {
-        'post': post,
-        'title': post.title
-    }
+def post_detail(request, post_id):
+    """Показывает страницы публикаций."""
+    post = get_object_or_404(Post.post_objects.all(), id=post_id)
+    context = {'post': post}
     return render(request, 'blog/detail.html', context)
+
+
+def category_posts(request, category_slug):
+    """Показывает страницы категорий."""
+    category = get_object_or_404(
+        Category,
+        slug=category_slug,
+        is_published=True
+    )
+    posts = Post.post_objects.all().filter(category=category)
+    return render(
+        request,
+        'blog/category.html',
+        {'category': category, 'post_list': posts}
+    )

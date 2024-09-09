@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 
 from django.db import models
 
+from .managers import PostManager
+
 
 User = get_user_model()
 
@@ -9,7 +11,7 @@ User = get_user_model()
 class Category(models.Model):
     title = models.CharField(
         max_length=256,
-        verbose_name='Загаловок'
+        verbose_name='Заголовок'
     )
     description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
@@ -87,7 +89,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category,
         null=True,
-        blank=True,
+        blank=False,
         on_delete=models.CASCADE,
         verbose_name='Категория'
     )
@@ -100,6 +102,8 @@ class Post(models.Model):
         auto_now_add=True,
         verbose_name='Добавлено'
     )
+    objects = models.Manager()
+    post_objects = PostManager()
 
     class Meta:
         verbose_name = 'публикация'
