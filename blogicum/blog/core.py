@@ -3,6 +3,7 @@ from django.db import models
 
 class BaseModel(models.Model):
     """Базовая модель с общими полями."""
+
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
