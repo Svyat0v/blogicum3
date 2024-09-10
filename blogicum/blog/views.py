@@ -1,13 +1,11 @@
 from django.shortcuts import get_object_or_404, render
 
 from .constants import AMOUNT_POSTS_ON_MAIN_PAGE
-
 from .models import Category, Post
 
 
 def index(request):
     """Показывает на главной странице."""
-    print(Post.post_objects.all())  # Строка для отладки
     posts = Post.post_objects.all()[:AMOUNT_POSTS_ON_MAIN_PAGE]
     context = {'post_list': posts}
     return render(request, 'blog/index.html', context)
@@ -15,7 +13,13 @@ def index(request):
 
 def post_detail(request, post_id):
     """Показывает страницы публикаций."""
-    post = get_object_or_404(Post.post_objects.all(), id=post_id)
+    post = get_object_or_404(
+        Post.post_objects.all(),
+        id=post_id
+    )
+    if not post.is_published and request.user != post.author:
+        return get_object_or_404(Post, id=post_id, is_published=True)
+
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
 
@@ -27,7 +31,7 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    posts = Post.post_objects.all().filter(category=category)
+    posts = category.posts.all()
     return render(
         request,
         'blog/category.html',
