@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.http import Http404
 
 from .constants import AMOUNT_POSTS_ON_MAIN_PAGE
 from .models import Category, Post
@@ -18,7 +19,7 @@ def post_detail(request, post_id):
         id=post_id
     )
     if not post.is_published and request.user != post.author:
-        return get_object_or_404(Post, id=post_id, is_published=True)
+        raise Http404("Публикация не найдена.")
 
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
@@ -31,7 +32,8 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    posts = category.posts.all()
+    posts = category.posts.filter(is_published=True)
+
     return render(
         request,
         'blog/category.html',
