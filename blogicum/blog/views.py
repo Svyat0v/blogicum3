@@ -32,7 +32,7 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    posts = category.posts(manager='post_objects').filter(is_published=True)
+    posts = category.posts(manager='post_objects').all()
 
     return render(
         request,
